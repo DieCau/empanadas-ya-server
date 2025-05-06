@@ -1,6 +1,6 @@
-import bcrypt from "bcrypt";
-import express from "express";
-import db from "../config/db.js";
+const bcrypt = require("bcrypt");
+const express = require("express");
+const db = require("../models/db");
 
 const router = express.Router();
 
@@ -45,4 +45,5 @@ router.post("/register", async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
+
