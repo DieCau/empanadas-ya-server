@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
+import verifyToken from '../middlewares/verifyToken.js';
 const router = express.Router();
-const verifyToken = require('../middlewares/verifyToken');
 
 router.get('/', verifyToken, async (req, res) => {
   const pedidos = [
@@ -20,4 +20,4 @@ router.put('/:id', verifyToken, async (req, res) => {
   res.json({ msg: 'Estado actualizado', id, estado });
 });
 
-module.exports = router;
+export default router;

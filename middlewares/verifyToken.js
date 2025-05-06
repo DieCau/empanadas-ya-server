@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-module.exports = function (req, res, next) {
+const authMiddleware = (req, res, next) => {
   const token = req.header('Authorization')?.split(' ')[1];
   if (!token) return res.status(401).json({ msg: 'Acceso denegado' });
 
@@ -12,3 +12,5 @@ module.exports = function (req, res, next) {
     res.status(400).json({ msg: 'Token inválido' });
   }
 };
+
+export default authMiddleware;
