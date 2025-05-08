@@ -1,13 +1,14 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-const app = express();
-
-dotenv.config();
 
 import authRoutes from './routes/authRoutes.js';
 import pedidosRoutes from './routes/pedidosRoutes.js';
 import usuariosRoutes from './routes/usuariosRoutes.js';
+
+dotenv.config();
+
+const app = express();
 
 app.use(cors());
 app.use(express.json());
