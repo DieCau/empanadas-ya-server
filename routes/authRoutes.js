@@ -6,9 +6,6 @@ import db from '../models/db.js';
 const router = express.Router();
 
 router.post('/login', (req, res) => {
-  console.log('HEADERS:', req.headers);
-  console.log('BODY:', req.body);
-  res.end();
   const { email, password } = req.body;
 
   if (!email || !password)
@@ -23,8 +20,9 @@ router.post('/login', (req, res) => {
 
     const user = results[0];
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    
+    if (!passwordMatch) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
