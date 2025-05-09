@@ -18,6 +18,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/pedidos', pedidosRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 app.use('/api/productos', productosRoutes);
-
+app.use((req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
 
 export default app;
