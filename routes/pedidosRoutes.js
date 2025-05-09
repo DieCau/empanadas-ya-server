@@ -1,8 +1,8 @@
 import express from 'express';
-import verifyToken from '../middlewares/verifyToken.js';
+import authenticateToken from '../middlewares/authenticateToken.js';
 const router = express.Router();
 
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   const pedidos = [
     { id: 1, cliente: "Juan", zona: "Tafí del Valle", estado: "pendiente" },
     { id: 2, cliente: "Ana", zona: "Cafayate", estado: "entregado" },
@@ -11,7 +11,7 @@ router.get('/', verifyToken, async (req, res) => {
   res.json(pedidos);
 });
 
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
   const { estado } = req.body;
 
