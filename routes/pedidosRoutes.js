@@ -1,23 +1,40 @@
 import express from 'express';
+import db from '../db.js'; // tu conexión a MySQL
 import authenticateToken from '../middlewares/authenticateToken.js';
+
 const router = express.Router();
 
-router.get('/', authenticateToken, async (req, res) => {
-  const pedidos = [
-    { id: 1, cliente: "Juan", zona: "Tafí del Valle", estado: "pendiente" },
-    { id: 2, cliente: "Ana", zona: "Cafayate", estado: "entregado" },
-    { id: 3, cliente: "Luis", zona: "Amaicha", estado: "pendiente" },
-  ];
-  res.json(pedidos);
-});
+router.post('/', authenticateToken, async (req, res) => {
+  const { productos, direccion_envio, metodo_pago } = req.body;
+  const usuario_id = req.user.id;
 
-router.put('/:id', authenticateToken, async (req, res) => {
-  const { id } = req.params;
-  const { estado } = req.body;
+  try {
+    const [result] = await db.query(
+      `INSERT INTO ordenes (usuario_id, fecha_creacion, estado, total_orden, direccion_envio, metodo_pago)
+       VALUES (?, NOW(), 'pendiente', ?, ?, ?)`,
+      [
+        usuario_id,
+        productos.reduce((sum, p) => sum + p.precio * p.cantidad, 0),
+        direccion_envio,
+        metodo_pago,
+      ]
+    );
 
-  // Simulación: acá iría el UPDATE a la base de datos real
-  console.log(`Pedido ${id} actualizado a estado: ${estado}`);
-  res.json({ msg: 'Estado actualizado', id, estado });
+    const orden_id = result.insertId;
+
+    for (const prod of productos) {
+      await db.query(
+        `INSERT INTO orden_detalle (orden_id, producto_id, cantidad, precio_unitario)
+         VALUES (?, ?, ?, ?)`,
+        [orden_id, prod.id, prod.cantidad, prod.precio]
+      );
+    }
+
+    res.json({ msg: 'Orden creada exitosamente', orden_id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Error al procesar el pedido' });
+  }
 });
 
 export default router;
