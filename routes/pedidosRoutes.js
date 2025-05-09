@@ -1,6 +1,6 @@
 import express from 'express';
-import db from '../db.js'; // tu conexión a MySQL
 import authenticateToken from '../middlewares/authenticateToken.js';
+import db from '../models/db.js'; // tu conexión a MySQL
 
 const router = express.Router();
 
