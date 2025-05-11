@@ -9,6 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Importar las rutas
 import authRoutes from './routes/authRoutes.js';
 import pedidosRoutes from './routes/pedidosRoutes.js';
 import productosRoutes from './routes/productosRoutes.js';
