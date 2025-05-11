@@ -4,6 +4,7 @@ import db from '../models/db.js';
 
 const router = express.Router();
 
+// Ingresar en la base de datos
 router.post("/register", async (req, res) => {
   const { nombre, email, password, role } = req.body;
 
